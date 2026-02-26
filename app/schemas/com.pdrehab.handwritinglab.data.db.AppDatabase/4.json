@@ -1,0 +1,393 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 4,
+    "identityHash": "0c5bcd92c6b986200f6f3418ec5215fa",
+    "entities": [
+      {
+        "tableName": "participants",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`participantId` TEXT NOT NULL, `participantCode` TEXT NOT NULL, `assignedAddressId` TEXT NOT NULL, `assignedAddressText` TEXT NOT NULL, `createdAtMs` INTEGER NOT NULL, `notes` TEXT, PRIMARY KEY(`participantId`))",
+        "fields": [
+          {
+            "fieldPath": "participantId",
+            "columnName": "participantId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "participantCode",
+            "columnName": "participantCode",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "assignedAddressId",
+            "columnName": "assignedAddressId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "assignedAddressText",
+            "columnName": "assignedAddressText",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "createdAtMs",
+            "columnName": "createdAtMs",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "notes",
+            "columnName": "notes",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "participantId"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_participants_participantCode",
+            "unique": true,
+            "columnNames": [
+              "participantCode"
+            ],
+            "orders": [],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_participants_participantCode` ON `${TABLE_NAME}` (`participantCode`)"
+          }
+        ],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "sessions",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`sessionId` TEXT NOT NULL, `participantId` TEXT NOT NULL, `randomSeed` INTEGER NOT NULL, `createdAtMs` INTEGER NOT NULL, `endedAtMs` INTEGER, `pressureMvc` REAL, `baselineSizeScore` REAL, `assignedAddressText` TEXT NOT NULL, PRIMARY KEY(`sessionId`), FOREIGN KEY(`participantId`) REFERENCES `participants`(`participantId`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "sessionId",
+            "columnName": "sessionId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "participantId",
+            "columnName": "participantId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "randomSeed",
+            "columnName": "randomSeed",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "createdAtMs",
+            "columnName": "createdAtMs",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "endedAtMs",
+            "columnName": "endedAtMs",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "pressureMvc",
+            "columnName": "pressureMvc",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "baselineSizeScore",
+            "columnName": "baselineSizeScore",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "assignedAddressText",
+            "columnName": "assignedAddressText",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "sessionId"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_sessions_participantId",
+            "unique": false,
+            "columnNames": [
+              "participantId"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_sessions_participantId` ON `${TABLE_NAME}` (`participantId`)"
+          },
+          {
+            "name": "index_sessions_createdAtMs",
+            "unique": false,
+            "columnNames": [
+              "createdAtMs"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_sessions_createdAtMs` ON `${TABLE_NAME}` (`createdAtMs`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "participants",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "participantId"
+            ],
+            "referencedColumns": [
+              "participantId"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "task_instances",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`taskInstanceId` TEXT NOT NULL, `sessionId` TEXT NOT NULL, `taskId` TEXT NOT NULL, `trialIndex` INTEGER NOT NULL, `orderInSession` INTEGER NOT NULL, `startedAtMs` INTEGER NOT NULL, `endedAtMs` INTEGER NOT NULL, `countNextScreen` INTEGER NOT NULL, `pageCount` INTEGER NOT NULL, PRIMARY KEY(`taskInstanceId`), FOREIGN KEY(`sessionId`) REFERENCES `sessions`(`sessionId`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "taskInstanceId",
+            "columnName": "taskInstanceId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "sessionId",
+            "columnName": "sessionId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "taskId",
+            "columnName": "taskId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "trialIndex",
+            "columnName": "trialIndex",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "orderInSession",
+            "columnName": "orderInSession",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "startedAtMs",
+            "columnName": "startedAtMs",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "endedAtMs",
+            "columnName": "endedAtMs",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "countNextScreen",
+            "columnName": "countNextScreen",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "pageCount",
+            "columnName": "pageCount",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "taskInstanceId"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_task_instances_sessionId",
+            "unique": false,
+            "columnNames": [
+              "sessionId"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_task_instances_sessionId` ON `${TABLE_NAME}` (`sessionId`)"
+          },
+          {
+            "name": "index_task_instances_sessionId_taskId_trialIndex",
+            "unique": true,
+            "columnNames": [
+              "sessionId",
+              "taskId",
+              "trialIndex"
+            ],
+            "orders": [],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_task_instances_sessionId_taskId_trialIndex` ON `${TABLE_NAME}` (`sessionId`, `taskId`, `trialIndex`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "sessions",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "sessionId"
+            ],
+            "referencedColumns": [
+              "sessionId"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "metric_values",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`metricId` TEXT NOT NULL, `participantId` TEXT NOT NULL, `participantCode` TEXT, `sessionId` TEXT NOT NULL, `taskId` TEXT, `trialIndex` INTEGER, `metricKey` TEXT NOT NULL, `value` REAL, `unit` TEXT NOT NULL, `direction` TEXT NOT NULL, `createdAtMs` INTEGER NOT NULL, PRIMARY KEY(`metricId`))",
+        "fields": [
+          {
+            "fieldPath": "metricId",
+            "columnName": "metricId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "participantId",
+            "columnName": "participantId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "participantCode",
+            "columnName": "participantCode",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "sessionId",
+            "columnName": "sessionId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "taskId",
+            "columnName": "taskId",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "trialIndex",
+            "columnName": "trialIndex",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "metricKey",
+            "columnName": "metricKey",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "value",
+            "columnName": "value",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "unit",
+            "columnName": "unit",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "direction",
+            "columnName": "direction",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "createdAtMs",
+            "columnName": "createdAtMs",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "metricId"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_metric_values_sessionId_taskId_trialIndex_metricKey",
+            "unique": true,
+            "columnNames": [
+              "sessionId",
+              "taskId",
+              "trialIndex",
+              "metricKey"
+            ],
+            "orders": [],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_metric_values_sessionId_taskId_trialIndex_metricKey` ON `${TABLE_NAME}` (`sessionId`, `taskId`, `trialIndex`, `metricKey`)"
+          },
+          {
+            "name": "index_metric_values_taskId_metricKey_trialIndex",
+            "unique": false,
+            "columnNames": [
+              "taskId",
+              "metricKey",
+              "trialIndex"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_metric_values_taskId_metricKey_trialIndex` ON `${TABLE_NAME}` (`taskId`, `metricKey`, `trialIndex`)"
+          },
+          {
+            "name": "index_metric_values_participantId_taskId_metricKey_trialIndex",
+            "unique": false,
+            "columnNames": [
+              "participantId",
+              "taskId",
+              "metricKey",
+              "trialIndex"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_metric_values_participantId_taskId_metricKey_trialIndex` ON `${TABLE_NAME}` (`participantId`, `taskId`, `metricKey`, `trialIndex`)"
+          },
+          {
+            "name": "index_metric_values_sessionId",
+            "unique": false,
+            "columnNames": [
+              "sessionId"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_metric_values_sessionId` ON `${TABLE_NAME}` (`sessionId`)"
+          }
+        ],
+        "foreignKeys": []
+      }
+    ],
+    "views": [],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '0c5bcd92c6b986200f6f3418ec5215fa')"
+    ]
+  }
+}

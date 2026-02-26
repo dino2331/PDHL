@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<paths xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- 내부 filesDir/pdhl/... 공유 허용 -->
+    <files-path name="pdhl_exports" path="pdhl/exports/"/>
+    <files-path name="pdhl_root" path="pdhl/"/>
+</paths>
